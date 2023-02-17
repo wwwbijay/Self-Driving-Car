@@ -7,11 +7,10 @@ class Car{
         
         this.speed = 0;
         this.acceleration = 0.2;
-        this.maxSpeed = 3;
+        this.maxSpeed = 4;
         this.friction = 0.05;
 
         this.angle = 0;
-
         this.controls = new Controls();
     }
     draw(context){
@@ -24,9 +23,11 @@ class Car{
         context.rect(-this.width/2, -this.height/2, this.width, this.height);
         context.fill();
         context.restore();
+
     }
     update(){
         this.#move();
+        
     }
 
     #move(){
