@@ -1,22 +1,25 @@
-const canvas = document.getElementById('canvas');
+const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 canvas.width = 300;
 canvas.height = window.innerHeight;
 
-const car = new Car(100,100, 30, 50);
-const road = new Road(canvas.width/2, canvas.width);
+const road = new Road(canvas.width / 2, canvas.width * 0.9);
+const car = new Car(road.getLaneCenter(1), 300, 30, 50);
 
 let lastTime = 0;
-  //animation loop
-  function animate(timeStamp) {
-    const deltaTime = timeStamp - lastTime;
-    lastTime = timeStamp;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);   
-    road.draw(ctx);
+//animation loop
+function animate(timeStamp) {
+  const deltaTime = timeStamp - lastTime;
+  lastTime = timeStamp;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    car.draw(ctx);
-    car.update(deltaTime);
-    requestAnimationFrame(animate);
-  }
+  ctx.save();
+  ctx.translate(0, -car.y + canvas.height * 0.5);
+  road.draw(ctx);
+  car.draw(ctx);
+  ctx.restore();
+  car.update(deltaTime);
+  requestAnimationFrame(animate);
+}
 
-  animate(0);
+animate(0);
