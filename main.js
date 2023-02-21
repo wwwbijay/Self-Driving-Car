@@ -14,11 +14,13 @@ function animate(timeStamp) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   ctx.save();
-  ctx.translate(0, -car.y + canvas.height * 0.5);
+  ctx.translate(0, -car.y + canvas.height * 0.7);
+  car.update(road.borders);
+
   road.draw(ctx);
   car.draw(ctx);
   ctx.restore();
-  car.update(deltaTime);
+
   requestAnimationFrame(animate);
 }
 
