@@ -1,5 +1,5 @@
 class Car {
-  constructor(x, y, width, height) {
+  constructor(x, y, width, height, controlType, maxSpeed = 3) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -7,21 +7,23 @@ class Car {
 
     this.speed = 0;
     this.acceleration = 0.2;
-    this.maxSpeed = 3;
+    this.maxSpeed = maxSpeed;
     this.friction = 0.05;
 
     this.angle = 0;
     this.damaged = false;
+    if (controlType != "DUMMY") {
+      this.sensor = new Sensor(this);
+    }
 
-    this.sensor = new Sensor(this);
-    this.controls = new Controls();
+    this.controls = new Controls(controlType);
   }
 
-  draw(ctx) {
+  draw(ctx, color) {
     if (this.damaged) {
-      ctx.fillStyle = "red";
+      ctx.fillStyle = "Crimson";
     } else {
-      ctx.fillStyle = "black";
+      ctx.fillStyle = color;
     }
     ctx.beginPath();
     ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
@@ -40,25 +42,38 @@ class Car {
     // context.rect(-this.width / 2, -this.height / 2, this.width, this.height);
     // context.fill();
     // context.restore();
-    this.sensor.draw(ctx);
+    if (this.sensor) {
+      this.sensor.draw(ctx);
+    }
   }
 
-  update(roadBorders) {
+  update(roadBorders, traffic) {
     if (!this.damaged) {
       this.polygon = this.#createPolygon();
-      this.damaged = this.#accessDamage(roadBorders);
+      this.damaged = this.#accessDamage(roadBorders, traffic);
       this.#move();
     }
 
-    this.sensor.update(roadBorders);
+    if (this.sensor) {
+      this.sensor.update(roadBorders, traffic);
+    }
   }
 
-  #accessDamage(roadBorders) {
+  #accessDamage(roadBorders, traffic) {
     for (let i = 0; i < roadBorders.length; i++) {
       if (polysIntersect(this.polygon, roadBorders[i])) {
         return true;
       }
     }
+
+    for (let i = 0; i < traffic.length; i++) {
+      console.log(this.polygon, traffic[i].polygon);
+
+      if (polysIntersect(this.polygon, traffic[i].polygon)) {
+        return true;
+      }
+    }
+
     return false;
   }
 
