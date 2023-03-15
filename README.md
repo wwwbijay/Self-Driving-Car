@@ -1,5 +1,5 @@
-# Self-Driving-Car
-Self Driving Car Using Neural Networks and Machine Learning
+# Driving-Car using Vanilla js
+Driving Car Game Using Vanilla JS, demonstrate physics law by implementation of friction, acceleration,etc.
 
 # Manual Control
 Use arrow keys to control car.
